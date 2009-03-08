@@ -7,10 +7,18 @@ It's now ready for testing; I hope that it will make it into
 TeX Live 2009, automatically loaded by `inputenc` itself if necessary.
 
 Use it like the `inputenc` package:
+
     \usepackage[latin1]{xetex-inputenc}
 
 The `utf8` option is default, of course, but if you're using
 that then you don't need this package.
+
+Installation
+------------
+
+Run `pdflatex` on `xetex-inputenc.dtx` to extract the `.sty` file
+and produce the documentation. The test file `xetest-latin1.tex`
+should then compile exactly as expected.
 
 _______________________
 (C) Will Robertson 2009
