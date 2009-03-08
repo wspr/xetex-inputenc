@@ -1,11 +1,20 @@
 
-___________________________________
 THE XETEX-INPUTENC OVERRIDE PACKAGE
-v0.2
+===================================
 
 This package is designed to emulate LaTeX's `inputenc` package.
-**IT IS NOT YET READY FOR DISTRIBUTION** `:)`
+It's now ready for testing; I hope that it will make it into
+TeX Live 2009.
 
-___________________
-Will Robertson 2009
-Distributed under the LaTeX Project Public License
+Use it like the `inputenc` package:
+    \usepackage[latin1]{inputenc}
+
+The `utf8` option is default, of course, but if you're using
+that then you don't need this package.
+
+_______________________
+(C) Will Robertson 2009
+
+Distributed under v1.3c or later of
+the LaTeX Project Public License.
+

@@ -4,19 +4,25 @@
 %</internal>
 %<*readme>
 
-__________________________________________
-The xe-inputenc override package for XeTeX
-v0.1
+THE XETEX-INPUTENC OVERRIDE PACKAGE
+===================================
 
-This basic package is designed to override
-LaTeX's inputenc package so that users who
-load it in error can still typeset properly.
+This package is designed to emulate LaTeX's `inputenc` package.
+It's now ready for testing; I hope that it will make it into
+TeX Live 2009.
 
-IT IS NOT YET READY FOR DISTRIBUTION :)
+Use it like the `inputenc` package:  
+    \usepackage[latin1]{inputenc}
+    
+The `utf8` option is default, of course, but if you're using
+that then you don't need this package.
 
-___________________
-Will Robertson 2008
-Distributed under the LaTeX Project Public License
+_______________________
+(C) Will Robertson 2009
+
+Distributed under v1.3c or later of
+the LaTeX Project Public License.
+
 %</readme>
 %<*internal>
 \fi
@@ -30,16 +36,16 @@ Distributed under the LaTeX Project Public License
 \keepsilent
 \preamble
 
-  __________________________________________
-  The xe-inputenc override package for XeTeX
-  (C) 2008  Will Robertson    
+  ___________________________________
+  The xetex-inputenc override package
+  (C) 2009  Will Robertson    
   License information appended
 
 
 \endpreamble
 \postamble
 
-Copyright (C) 2008 by Will Robertson <wspr81@gmail.com>
+Copyright (C) 2009 by Will Robertson <wspr81@gmail.com>
 
 Distributable under the LaTeX Project Public License,
 version 1.3c or higher (your choice). The latest version of
@@ -48,10 +54,10 @@ this license is at: http://www.latex-project.org/lppl.txt
 This work is "maintained" (as per LPPL maintenance status) 
 by Will Robertson.
 
-This work consists of the file  xe-inputenc.dtx
-          and the derived files xe-inputenc.sty,
-                                xe-inputenc.ins, and
-                                xe-inputenc.pdf.
+This work consists of the file  xetex-inputenc.dtx
+          and the derived files xetex-inputenc.sty,
+                                xetex-inputenc.ins, and
+                                xetex-inputenc.pdf.
 
 \endpostamble
 \askforoverwritefalse
@@ -61,49 +67,40 @@ This work consists of the file  xe-inputenc.dtx
 %<*internal>
 \generate{\file{\jobname.ins}{\from{\jobname.dtx}{batchfile}}}
 \nopreamble\nopostamble
-\generate{\file{README.txt}{\from{\jobname.dtx}{readme}}}
-\generate{\file{dtx-style.sty}{\from{\jobname.dtx}{dtx-style}}}
+\generate{\file{README.markdown}{\from{\jobname.dtx}{readme}}}
 \endgroup
-\immediate\write18{makeindex -s gind.ist -o \jobname.ind  \jobname.idx}
-\immediate\write18{makeindex -s gglo.ist -o \jobname.gls  \jobname.glo}
 %</internal>
 %
 %<*driver>
-\ProvidesFile{xe-inputenc.dtx}
+\ProvidesFile{xetex-inputenc.dtx}
 %</driver>
-%<package>\ProvidesPackage{xe-inputenc}
+%<package>\ProvidesPackage{xetex-inputenc}
 %<*package>
-  [2008/05/15 v0.1 XeTeX-specific xe-inputenc package]
+  [2009/03/08 v0.2 XeTeX-specific inputenc package]
 %</package>
 %
 %<*driver>
 \documentclass[12pt]{ltxdoc}
-\EnableCrossrefs
-\CodelineIndex
-\RecordChanges
-%\OnlyDescription
-\usepackage{dtx-style}
+\let\pkg\textsf
+\def\XeTeX{Xe\TeX}
+\usepackage{hyperref}
 \begin{document}
   \DocInput{\jobname.dtx}
 \end{document}
 %</driver>
-%
 % \fi
 %
-% \errorcontextlines=999
 % \makeatletter
 %
 % \GetFileInfo{\jobname.dtx}
-%
-% \title{The \textsf{xe-inputenc} override\\ package for \XeTeX}
+% \title{The \textsf{xetex-inputenc} override package}
 % \author{Will Robertson}
 % \date{\filedate \qquad \fileversion}
-%
 % \maketitle
 %
 % \section{Introduction}
 %
-% When new users migrate from pdf\LaTeX\ to \XeLaTeX, some are often confused
+% When new users migrate from pdf\LaTeX\ to Xe\LaTeX, some are often confused
 % by the fact that the \pkg{inputenc} package is no longer needed; it does
 % seem somewhat intuitive that the correct incantation should now be
 % |\usepackage[utf8]{inputenc}|. Unfortunately, this is not the case due to
@@ -114,61 +111,126 @@ This work consists of the file  xe-inputenc.dtx
 % that interprets the wishes of the user without adding the code to break
 % \XeTeX's attempted reading of the input file.
 %
-% In this first hasty release of the package, any package options given to the
-% override \pkg{xe-inputenc} are passed directly to \XeTeX's low-level command
-% \cmd\XeTeXinputencoding. This command sets the encoding for subsequent
-% reading of the current file. All other files are still interpreted as
-% \textsc{utf8} else problems arise when reading |.aux| files (etc.), which
-% are always \emph{written} in the \textsc{utf8} encoding.
+% \XeTeX\ supports an exhaustive list of input encodings^^A
+% \footnote{Detailed here: \url{http://www.iana.org/assignments/character-sets}}. 
+% However, only those encodings explicitly supported by \pkg{inputenc}
+% are supported by this package. To quote the original documentation:
+% \begin{itemize}
+% \item |ascii|    ASCII encoding for the range 32--127 (all others are made
+%                  invalid, i.e., this really defines a 7-bit encoding).
+% \item |latin1|   ISO Latin-1 encoding.
+% \item |latin2|   ISO Latin-2 encoding.
+% \item |latin3|   ISO Latin-3 encoding.
+% \item |latin4|   ISO Latin-4 encoding.
+% \item |latin5|   ISO Latin-5 encoding.
+% \item |latin9|   ISO Latin-9 encoding.
+% \item |latin10|  ISO Latin-10 encoding.
+% \item |decmulti| DEC Multinational Character Set encoding.
+% \item |cp850|    IBM 850 code page.
+% \item |cp852|    IBM 852 code page.
+% \item |cp858|    IBM 858 code page (this is 850 with Euro symbol).
+% \item |cp437|    IBM 437 code page.
+% \item |cp437de|  IBM 437 code page (German version).
+% \item |cp865|    IBM 865 code page.
+% \item |applemac| Macintosh encoding.
+% \item |macce|    Macintosh Central European code page.
+% \item |next|    Next encoding.
+% \item |cp1250|  Windows 1250 (central and eastern Europe) code page.
+% \item |cp1252|  Windows 1252 (Western Europe) code page.
+% \item |cp1257|  Windows 1257 (Baltic) code page.
+% \item |ansinew| Windows 3.1 ANSI encoding, extension of Latin-1
+%                 (synonym\footnote{It is now generated using the guards
+%                 \texttt{cp1252,ansinew} the latter only used for the provides
+%                 file line.} for |cp1252|).
+% \item |utf8|    Unicode UTF-8 encoding support.
+% \end{itemize}
 %
-% The best solution, possibly, would be to declare \cmd\XeTeXinputencoding\
-% explicitly to |"utf8"| for all \XeTeX-written files, and use
-% \cmd\XeTeXdefaultencoding\ to read all other input files in the encoding
-% specified by the options to this package.
-%
-% An exhaustive list of input encodings supported by \XeTeX\ is shown here:
-% \url{http://www.iana.org/assignments/character-sets}. Luckily, most or all
-% of the encoding names supported by the traditional \pkg{inputenc} share
-% their names here. TODO: provide a complete and correct mapping from
-% \pkg{inputenc}'s encoding options to \XeTeX's.
-%
+% Unfortunately I don't believe that |cp437de| is a standard encoding;
+% \XeTeX\ therefore cannot support it. I'm also not sure what the standard
+% names for the |next| and |macce| encodings are, so they're not supported
+% right now.
 %
 % \part{Implementation}
+%
 %\iffalse
 %<*package>
 %\fi
-% This is the package implementation.
 %
-% \PrintChanges
-% \changes{v0.1}{2008/05/15}{Initial version.}
-% 
-% Do the right thing and indicate we've overriden \LaTeX's \pkg{inputenc}:
+% Wrapper to declare the package options:
 %    \begin{macrocode}
-\typeout{%
-  Loading a XeTeX-specific package to 
-  override LaTeX's inputenc package.}
+\def\xIE@encoding#1#2{%
+  \DeclareOption{#1}{%
+    \xIE@set{#2}
+  }%
+}
 %    \end{macrocode}
-%
-% Just to be safe:
-%    \begin{macrocode}
-\RequirePackage{ifxetex}
-\RequireXeTeX
-%    \end{macrocode}
-%
-% Pass the package option to \XeTeX's input encoding primitives:
+% And a catch in case the user tries something new:
 %    \begin{macrocode}
 \DeclareOption*{%
-  \PackageWarning{xe-inputenc}{^^J\space\space 
-    XeTeX input encoding set to '\CurrentOption' for the rest of^^J% 
-    \space\space file '\jobname'.^^J\space\space 
-    All subsequent files to be read will be interpreted as UTF8.^^J
-    This message occured}%
-  \XeTeXinputencoding "\CurrentOption"}
+  \PackageWarning{xetex-inputenc}{%
+    Encoding "\CurrentOption" not recognised; attempting to use it anyway
+  }%
+  \xIE@set{\CurrentOption}%
+}
 %    \end{macrocode}
-% It might be better not to execute anything, but for now just do |utf8| by default:
+% This is how we set the input encoding in \XeTeX:
+%    \begin{macrocode}
+\newcommand\xIE@set[1]{%
+  \edef\xetex@inputenc{#1}%
+  \AtEndOfPackage{%
+    \XeTeXinputencoding   "\xetex@inputenc"
+    \XeTeXdefaultencoding "\xetex@inputenc"
+  }
+}
+%    \end{macrocode}
+% Here are the supported encodings:
+%    \begin{macrocode}
+\xIE@encoding{ascii}    {ascii}
+\xIE@encoding{latin1}   {latin1}
+\xIE@encoding{latin2}   {latin2}
+\xIE@encoding{latin3}   {latin3}
+\xIE@encoding{latin4}   {latin4}
+\xIE@encoding{latin5}   {latin5}
+\xIE@encoding{latin9}   {latin9}
+\xIE@encoding{latin10}  {latin10}
+\xIE@encoding{decmulti} {dec}
+\xIE@encoding{cp850}    {cp850}
+\xIE@encoding{cp852}    {cp852}
+\xIE@encoding{cp858}    {cp858}
+\xIE@encoding{cp437}    {cp437}
+\xIE@encoding{cp865}    {cp865}
+\xIE@encoding{applemac} {mac}
+\xIE@encoding{cp1250}   {windows-1250}
+\xIE@encoding{cp1252}   {windows-1252}
+\xIE@encoding{cp1257}   {windows-1257}
+\xIE@encoding{ansinew}  {windows-1252}
+\xIE@encoding{utf8}     {utf8}
+%    \end{macrocode}
+% |utf8| is the default, of course:
 %    \begin{macrocode}
 \ExecuteOptions{utf8}
 \ProcessOptions
+%    \end{macrocode}
+%
+% \subsection{Patching \LaTeX} 
+%
+% Patch \LaTeX's internal file-loading process to switch the encoding
+% back to normal for all \XeTeX-written files (which are always in UTF-8).
+%    \begin{macrocode}
+\def\@input#1{%
+  \IfFileExists{#1}{%
+    \XeTeXdefaultencoding "utf8"
+    \@@input\@filef@und
+    \XeTeXdefaultencoding "\xetex@inputenc"
+  }{\typeout{No file #1.}}%
+}
+%    \end{macrocode}
+% 
+% Not exactly sure why this is needed.
+%    \begin{macrocode}
+\AtBeginDocument{%
+  \immediate\write\@auxout{\string\XeTeXinputencoding "utf8"}%
+}
 %    \end{macrocode}
 %
 % And that's it!
@@ -176,65 +238,6 @@ This work consists of the file  xe-inputenc.dtx
 %\iffalse
 %</package>
 %\fi
-%
-% \clearpage
-% \PrintIndex
-%
-% \Finale
-%
-%\iffalse
-%<*dtx-style>
-%    \begin{macrocode}
-\ProvidesPackage{dtx-style}
-
-\def\@dotsep{1000}
-\setcounter{tocdepth}{2}
-
-\setcounter{IndexColumns}{2}
-\renewenvironment{theglossary}
-  {\small\list{}{}
-     \item\relax
-     \glossary@prologue\GlossaryParms 
-     \let\item\@idxitem \ignorespaces 
-     \def\pfill{\hspace*{\fill}}}
-  {\endlist}
-
-\usepackage{array,booktabs,calc,color,enumitem,fancyvrb,graphicx,ifthen,refstyle,url,varioref}
-\usepackage{fontspec,xunicode,xltxtra}
-\setromanfont[Mapping=tex-text, BoldFont=Hoefler Text,
-  ItalicFeatures={Contextuals={NoWordFinal,NoLineFinal}}]{Hoefler Text}
-\setsansfont[Scale=MatchLowercase,Mapping=tex-text,BoldFont=Gill Sans]{Gill Sans}
-\setmonofont[Scale=MatchLowercase]{Monaco}
-
-\linespread{1.05}      % A bit more space between lines
-\frenchspacing         % Remove ugly extra space after punctuation
-  
-\definecolor{niceblue}{rgb}{0.2,0.4,0.6}
-\def\theCodelineNo{\textcolor{niceblue}{\sffamily\tiny\arabic{CodelineNo}}}
-
-\newcommand*\pkg[1]{\texttt{#1}}
-\newcommand*\pkgopt[1]{\texttt{[#1]} package option}
-
-\newcounter{argument}
-\g@addto@macro\endmacro{\setcounter{argument}{0}}
-\newcommand*\darg[1]{%
-  \stepcounter{argument}%
-  \noindent{\ttfamily\#\theargument}:~#1\par\nobreak}
-\newcommand*\doarg[1]{%
-  \stepcounter{argument}%
-  \noindent{\ttfamily\makebox[0pt][r]{[}\#\theargument]}:~#1\par\nobreak}
-%    \end{macrocode}
-%</dtx-style>
-%\fi
-%
-% \typeout{*************************************************************}
-% \typeout{*}
-% \typeout{* To finish the installation you have to move the following}
-% \typeout{* file into a directory searched by XeTeX:}
-% \typeout{*}
-% \typeout{* \space\space\space xe-inputenc.sty}
-% \typeout{*}
-% \typeout{*************************************************************}
 %
 \endinput
  
