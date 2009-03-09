@@ -4,9 +4,9 @@
 %
 % Three possibilities for compiling this document:
 %
-% 1.   pdflatex xetest-latin1
-% 2.   xelatex  xetest-latin1
-% 3.   xelatex  "\let\iffontspec\iftrue\input xetest-latin1"
+% 1.   pdflatex test-latin1
+% 2.   xelatex  test-latin1
+% 3.   xelatex  "\let\iffontspec\iftrue\input test-latin1"
 %
 % Compilations #1 and #2 both compile the Latin 1--encoded document
 % with a legacy .tfm-based font in T1 encoding.
@@ -42,12 +42,12 @@
 \tableofcontents
 \listoffigures
 
-\section{Main file: å é î ø ü}
+\section{Main file: Ã‚ Ãˆ Ã“ Â¯ Â¸}
 \input xetest-latin1-subfile.tex
 
 \begin{figure}[b]
 \centering\rule{1em}{1em}
-\caption{Caption:  å é î ø ü}
+\caption{Caption:  Ã‚ Ãˆ Ã“ Â¯ Â¸}
 \end{figure}
 
 \end{document}

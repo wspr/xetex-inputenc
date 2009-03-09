@@ -27,9 +27,9 @@ Test file
 The test file `xetest-latin1.tex` should then compile in all three of the
 following modes:
 
-1.   pdflatex  xetest-latin1
-2.   xelatex   xetest-latin1
-3.   xelatex   "\let\iffontspec\iftrue\input xetest-latin1"
+1.   pdflatex  test-latin1
+2.   xelatex   test-latin1
+3.   xelatex   "\let\iffontspec\iftrue\input test-latin1"
 
 The document requires two compilations to resolve the table of contents.
 See the test file itself for more details about what each mode is testing.
