@@ -1,4 +1,3 @@
-
 THE XETEX-INPUTENC OVERRIDE PACKAGE
 ===================================
 
@@ -40,4 +39,3 @@ _______________________
 
 Distributed under v1.3c or later of
 the LaTeX Project Public License.
-

@@ -1,44 +1,5 @@
 % \iffalse
 %<*internal>
-\iffalse
-%</internal>
-%<*readme>
-
-THE XETEX-INPUTENC OVERRIDE PACKAGE
-===================================
-
-This package is designed to emulate LaTeX's `inputenc` package.
-It's now ready for testing; I hope that it will make it into
-TeX Live 2009, automatically loaded by `inputenc` itself if necessary.
-
-Use it like the `inputenc` package:
-  
-    \usepackage[latin1]{xetex-inputenc}
-    
-The `utf8` option is default, of course, but if you're using
-that then you don't need this package.
-
-
-
-Installation
-------------
-
-Run `pdflatex` on `xetex-inputenc.dtx` to extract the `.sty` file
-and produce the documentation. The test file `xetest-latin1.tex`
-should then compile exactly as expected.
-
-_______________________
-(C) Will Robertson 2009
-
-Distributed under v1.3c or later of
-the LaTeX Project Public License.
-
-%</readme>
-%<*internal>
-\fi
-%</internal>
-%
-%<*internal>
 \begingroup
 %</internal>
 %<*batchfile>
@@ -76,8 +37,6 @@ This work consists of the file  xetex-inputenc.dtx
 %<batchfile>\endbatchfile
 %<*internal>
 \generate{\file{\jobname.ins}{\from{\jobname.dtx}{batchfile}}}
-\nopreamble\nopostamble
-\generate{\file{README.markdown}{\from{\jobname.dtx}{readme}}}
 \endgroup
 %</internal>
 %
@@ -86,13 +45,17 @@ This work consists of the file  xetex-inputenc.dtx
 %</driver>
 %<package>\ProvidesPackage{xetex-inputenc}
 %<*package>
-  [2009/03/08 v0.2 XeTeX-specific inputenc package]
+  [2009/03/09 v0.2 XeTeX-specific inputenc package]
 %</package>
 %
 %<*driver>
 \documentclass[12pt]{ltxdoc}
 \let\pkg\textsf
-\def\XeTeX{Xe\TeX}
+\def\XeTeX{\textsc{xetex}}
+\def\XeLaTeX{\textsc{xelatex}}
+\def\pdfTeX{\textsc{pdftex}}
+\def\pdfLaTeX{\textsc{pdflatex}}
+\def\LaTeX{\textsc{latex}}
 \usepackage{hyperref}
 \begin{document}
   \DocInput{\jobname.dtx}
@@ -108,13 +71,11 @@ This work consists of the file  xetex-inputenc.dtx
 % \date{\filedate \qquad \fileversion}
 % \maketitle
 %
-% \section{Introduction}
-%
-% When new users migrate from pdf\LaTeX\ to Xe\LaTeX, some are often confused
+% When new users migrate from \pdfLaTeX\ to \XeLaTeX, some are often confused
 % by the fact that the \pkg{inputenc} package is no longer needed; it does
 % seem somewhat intuitive that the correct incantation should now be
 % |\usepackage[utf8]{inputenc}|. Unfortunately, this is not the case due to
-% differences between the way the 8-bit \TeX\ and pdf\TeX\ engines parse
+% differences between the way the 8-bit \TeX\ and \pdfTeX\ engines parse
 % unicode files in comparison to \XeTeX.
 %
 % It seems useful, then, to provide an `override package' for \pkg{inputenc}
@@ -124,10 +85,9 @@ This work consists of the file  xetex-inputenc.dtx
 % \XeTeX\ supports an exhaustive list of input encodings^^A
 % \footnote{Detailed here: \url{http://www.iana.org/assignments/character-sets}}. 
 % However, only those encodings explicitly supported by \pkg{inputenc}
-% are supported by this package. To quote the original documentation:
-% \begin{itemize}
-% \item |ascii|    ASCII encoding for the range 32--127 (all others are made
-%                  invalid, i.e., this really defines a 7-bit encoding).
+% are supported by this package. Adapted from the original documentation:
+% \begin{itemize}\parskip=0pt\itemsep=0pt
+% \item |ascii|    ASCII encoding for the range 32--127
 % \item |latin1|   ISO Latin-1 encoding.
 % \item |latin2|   ISO Latin-2 encoding.
 % \item |latin3|   ISO Latin-3 encoding.
@@ -140,33 +100,41 @@ This work consists of the file  xetex-inputenc.dtx
 % \item |cp852|    IBM 852 code page.
 % \item |cp858|    IBM 858 code page (this is 850 with Euro symbol).
 % \item |cp437|    IBM 437 code page.
-% \item |cp437de|  IBM 437 code page (German version).
 % \item |cp865|    IBM 865 code page.
 % \item |applemac| Macintosh encoding.
-% \item |macce|    Macintosh Central European code page.
-% \item |next|    Next encoding.
 % \item |cp1250|  Windows 1250 (central and eastern Europe) code page.
 % \item |cp1252|  Windows 1252 (Western Europe) code page.
 % \item |cp1257|  Windows 1257 (Baltic) code page.
 % \item |ansinew| Windows 3.1 ANSI encoding, extension of Latin-1
-%                 (synonym\footnote{It is now generated using the guards
-%                 \texttt{cp1252,ansinew} the latter only used for the provides
-%                 file line.} for |cp1252|).
+%                 (synonym for |cp1252|).
 % \item |utf8|    Unicode UTF-8 encoding support.
 % \end{itemize}
-%
+% The following encodings are \emph{not} supported right now:
+% \begin{itemize}\parskip=0pt\itemsep=0pt
+% \item |cp437de|  IBM 437 code page (German version).
+% \item |macce|    Macintosh Central European code page.
+% \item |next|    Next encoding.
+% \end{itemize}
 % Unfortunately I don't believe that |cp437de| is a standard encoding;
 % \XeTeX\ therefore cannot support it. I'm also not sure what the standard
 % names for the |next| and |macce| encodings are, so they're not supported
-% right now.
+% either right now.
 %
-% \part{Implementation}
+% If \pkg{xetex-inputenc} does not recognise one of the encoding names above
+% it passes the option directly to \XeTeX's input encoding commands. For example,
+% |latin8| is not supported by \pkg{inputenc} but  it will be happily accepted
+% if you attempt to use it here.
 %
-%\iffalse
+% \section{Implementation}
+%
+%    \begin{macrocode}
 %<*package>
-%\fi
+%    \end{macrocode}
 %
-% Wrapper to declare the package options:
+% \subsection{Setting the encoding and package options}
+%
+% \begin{macro}{\xIE@encoding}
+% Wrapper to declare the package options conveniently:
 %    \begin{macrocode}
 \def\xIE@encoding#1#2{%
   \DeclareOption{#1}{%
@@ -174,6 +142,7 @@ This work consists of the file  xetex-inputenc.dtx
   }%
 }
 %    \end{macrocode}
+% \end{macro}
 % And a catch in case the user tries something new:
 %    \begin{macrocode}
 \DeclareOption*{%
@@ -183,6 +152,8 @@ This work consists of the file  xetex-inputenc.dtx
   \xIE@set{\CurrentOption}%
 }
 %    \end{macrocode}
+%
+% \begin{macro}{\xIE@set}
 % This is how we set the input encoding in \XeTeX:
 %    \begin{macrocode}
 \newcommand\xIE@set[1]{%
@@ -193,7 +164,10 @@ This work consists of the file  xetex-inputenc.dtx
   }
 }
 %    \end{macrocode}
-% Here are the supported encodings:
+% \end{macro}
+%
+% \subsection{Support encodings}
+%
 %    \begin{macrocode}
 \xIE@encoding{ascii}    {ascii}
 \xIE@encoding{latin1}   {latin1}
@@ -216,7 +190,9 @@ This work consists of the file  xetex-inputenc.dtx
 \xIE@encoding{ansinew}  {windows-1252}
 \xIE@encoding{utf8}     {utf8}
 %    \end{macrocode}
-% |utf8| is the default, of course:
+% |utf8| is the default, of course. We could simply do nothing when |utf8| 
+% is selected (since that's how \XeTeX\ behaves anyway) but there's no harm
+% specifying the encoding explicitly.
 %    \begin{macrocode}
 \ExecuteOptions{utf8}
 \ProcessOptions
@@ -224,8 +200,16 @@ This work consists of the file  xetex-inputenc.dtx
 %
 % \subsection{Patching \LaTeX} 
 %
+% \begin{macro}{\@input}
 % Patch \LaTeX's internal file-loading process to switch the encoding
 % back to normal for all \XeTeX-written files (which are always in UTF-8).
+% |\@input| is the version of |\input| that \LaTeX\ uses load the |.aux|
+% file, and so on; hopefully third-party packages that write their own
+% auxiliary files use it as well\dots
+%
+% The purpose for this macro in \LaTeX\ is to load packages without
+% adding their names to the |\listfiles| command; it's just a happy
+% coincidence that it can be co-opted to support \XeTeX\ input encoding.
 %    \begin{macrocode}
 \def\@input#1{%
   \IfFileExists{#1}{%
@@ -235,19 +219,17 @@ This work consists of the file  xetex-inputenc.dtx
   }{\typeout{No file #1.}}%
 }
 %    \end{macrocode}
-% 
-% Not exactly sure why this is needed.
+% \end{macro}
+% Not exactly sure why this is needed, actually:
 %    \begin{macrocode}
 \AtBeginDocument{%
   \immediate\write\@auxout{\string\XeTeXinputencoding "utf8"}%
 }
 %    \end{macrocode}
 %
-% And that's it!
-%
-%\iffalse
+%    \begin{macrocode}
 %</package>
-%\fi
+%    \end{macrocode}
 %
 \endinput
  
