@@ -1,9 +1,44 @@
+%
+% TESTING XETEX-INPUTENC
+% ======================
+%
+% Three possibilities for compiling this document:
+%
+% 1.   pdflatex xetest-latin1
+% 2.   xelatex  xetest-latin1
+% 3.   xelatex  "\let\iffontspec\iftrue\input xetest-latin1"
+%
+% Compilations #1 and #2 both compile the Latin 1--encoded document
+% with a legacy .tfm-based font in T1 encoding.
+%
+% Compilation #3 compiles the document with a unicode font.
+%
+% All three should produce identical output.
+% 
+
+\ifcsname iffontspec\endcsname
+  \def\next#1{}
+\else
+  \def\next#1{#1}
+\fi
+\next{\let\iffontspec\iffalse}
 
 \documentclass{article}
-\usepackage[latin1]{xetex-inputenc}
-\usepackage{fontspec}
+\usepackage{ifxetex}
+\ifxetex
+  \usepackage[latin1]{xetex-inputenc}
+\else
+  \usepackage[latin1]{inputenc}
+\fi
+\iftrue
+  \usepackage[T1]{fontenc}
+  \usepackage{lmodern}
+\else
+  \usepackage{fontspec}
+\fi
+
 \begin{document}
-  
+
 \tableofcontents
 \listoffigures
 
