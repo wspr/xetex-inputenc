@@ -13,12 +13,27 @@ Use it like the `inputenc` package:
 The `utf8` option is default, of course, but if you're using
 that then you don't need this package.
 
+
 Installation
 ------------
 
 Run `pdflatex` on `xetex-inputenc.dtx` to extract the `.sty` file
-and produce the documentation. The test file `xetest-latin1.tex`
-should then compile exactly as expected.
+and produce the documentation, such as it is.
+
+
+Test file
+---------
+
+The test file `xetest-latin1.tex` should then compile in all three of the
+following modes:
+
+1.   pdflatex  xetest-latin1
+2.   xelatex   xetest-latin1
+3.   xelatex   "\let\iffontspec\iftrue\input xetest-latin1"
+
+The document requires two compilations to resolve the table of contents.
+See the test file itself for more details about what each mode is testing.
+
 
 _______________________
 (C) Will Robertson 2009
