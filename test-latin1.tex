@@ -42,12 +42,15 @@
 \tableofcontents
 \listoffigures
 
-\section{Main file: Ã‚ Ãˆ Ã“ Â¯ Â¸}
-\input xetest-latin1-subfile.tex
+\section{Main file: å é î ø ü}
+\subsection{\protect å \protect é \protect î \protect ø \protect ü}
+\subsection{\string å \string é \string î \string ø \string ü}
+
+\input test-latin1-subfile.tex
 
 \begin{figure}[b]
 \centering\rule{1em}{1em}
-\caption{Caption:  Ã‚ Ãˆ Ã“ Â¯ Â¸}
+\caption{Caption: å \protect é \string î \unexpanded{ø} ü .}
 \end{figure}
 
 \end{document}
