@@ -220,7 +220,10 @@ This work consists of the file  xetex-inputenc.dtx
 }
 %    \end{macrocode}
 % \end{macro}
-% Not exactly sure why this is needed, actually:
+%
+% Unfortunately the second time the |.aux| file is read in by \LaTeX\
+% it uses the |\input| macro rather than |\@input|. So we need to explicitly
+% flag that this file is written in UTF-8 encoding:
 %    \begin{macrocode}
 \AtBeginDocument{%
   \immediate\write\@auxout{\string\XeTeXinputencoding "utf8"}%
